@@ -23,6 +23,8 @@ console.log(sum(1)("a"));
 console.log(sum(1, "a"));
 console.log(sum(1, 2));
 
+//Para empezar, en esta funcion puse el segundo parametro por defecto null, asi ya no era 100% necesario recibir un segundo parametro, primero pregunto si de por si los 2 son numeros, los sumo y los retorno. Pero sino, pregunto si llego algo en el segundo parametro, para saber si tengo que retornar una funcion que reciba el otro parametro que se envio, pero si el primero o el segundo no es algun numero, consologueo el error.
+
 const users1 = [
   {
     id: 1,
@@ -79,6 +81,8 @@ console.log(
   someUserLoggedInLastMinutes(users2)
 );
 
+//Para chequear esta funcion declare 2 listas de usuarios, donde una contiene algun usuario loguiado hace 30 minutos y en la otra no. Lo que hago en la funcion es llamar al objeto global date y obtengo los milisegundos actuales, y le resto 30 minutos (multiplicando 30 minutos por 60 segundos por 1000 milisegundos) y retorno el resultado del metodo some de la lista de los usuarios si es que encuentra un usuario que fue loguiado despues de los ultimos 30 minutos.
+
 function isAnAnargam(string1, string2) {
   if (!isString(string1) || !isString(string2)) {
     return "Some parameter is not a string";
@@ -134,11 +138,9 @@ console.log(
   isAnAnargam("   arbosta  bo AA  boaa", "bo AA arbostboaaa ")
 );
 
-function generateSecurePassword(length) {
-  if (isNaN(parseInt(length)) || length < 4 || length > 100) {
-    return "Is not a valid length";
-  }
+//Lo primero que hago en esta funcion es pasar a array cada string asi obtengo metodos para recorrer cada caracter que si eran strings no podia. Necesitaba ir descartando cada caracter de un string que no se encontraba en el otro string, con metodos como el includes, unicamente, no me servia ya que si se repetia algun caracter en un string y en el otro no, responderia algun error, entonces lo resolvi borrando los caracteres que ya pase del primer array con el metodo shift. Utilice el array characterchecked que guarda el indice de los caracteres ya pasados para que no vuelva a preguntar por un caracter que ya pase y utilice el found y el break para optimizar el bucle para que no haga iteraciones innescesarias.
 
+function generateSecurePassword(length) {
   const toUpperCaseCharacters = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
   const toLowerCaseCharacters = "abcdefghijklmnñopqrstuvwxyz";
   const numbers = "0123456789";
@@ -151,12 +153,25 @@ function generateSecurePassword(length) {
     specialCharacters,
   ];
 
+  let groupCharactersLength = groupsCharacters.length;
+  let maxLength = 25;
+
+  if (
+    isNaN(parseInt(length)) ||
+    length <= groupCharactersLength ||
+    length > maxLength
+  ) {
+    return "Is not a valid length";
+  }
+
   let newPassword = "";
   let countCharacterUsed = 0;
 
   for (let i = 0; i < length; i++) {
     if (countCharacterUsed === 4) {
-      let groupCharacters = parseInt(Math.random() * 4);
+      let groupCharacters = parseInt(
+        Math.random() * (groupCharactersLength + 1)
+      );
 
       let selectedCharacter = groupsCharacters[groupCharacters];
 
@@ -196,3 +211,5 @@ console.log(generateSecurePassword(-1));
 console.log(generateSecurePassword(3));
 console.log(generateSecurePassword(5));
 console.log(generateSecurePassword(8));
+
+//En la funcion de generar la contraseña valido inicialmente que sea una longitud valida, ya que tiene como requisito 4 condiciones para los caracteres, ingrese como validacion que sea de una longitud entre 4 (el largo de los grupos de caracteres nescesarios), 25 (un maximo para que no puedas ingresar un numero extremadamente grande) y que sea un numero. Luego hago un for donde las primeras 4 iteraciones son obligatoriamente un grupo de caracteres distinto al anterior, y una vez que se cumple, hago un random en base a la cantidad de grupos de caracteres y luego otro random en base a la cantidad de caracteres almacenados en el array de los grupos de caracteres indexado por el primero random. Y como claramente hay un patron que se repite en los primeros 4 caracteres, cree la funcion disorderString, que almacena la logica para retornar un nuevo string desordenado.
