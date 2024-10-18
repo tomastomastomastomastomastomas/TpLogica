@@ -169,9 +169,7 @@ function generateSecurePassword(length) {
 
   for (let i = 0; i < length; i++) {
     if (countCharacterUsed === 4) {
-      let groupCharacters = parseInt(
-        Math.random() * (groupCharactersLength + 1)
-      );
+      let groupCharacters = parseInt(Math.random() * groupCharactersLength);
 
       let selectedCharacter = groupsCharacters[groupCharacters];
 
@@ -179,7 +177,6 @@ function generateSecurePassword(length) {
         selectedCharacter[parseInt(Math.random() * selectedCharacter.length)];
     } else {
       let selectedCharacter = groupsCharacters[countCharacterUsed];
-
       newPassword +=
         selectedCharacter[parseInt(Math.random() * selectedCharacter.length)];
       countCharacterUsed++;
